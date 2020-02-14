@@ -15,6 +15,7 @@ class Laporan_keluar extends CI_Controller {
 		$data['page'] = 'Master laporan_keluar';
 		$data['content'] = 'pages/laporan_keluar_view';
 		$this->load->view('template/main', $data);
+		/// adsds
 	}
 
 	public function ajax_list()
