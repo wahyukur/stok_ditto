@@ -12,10 +12,10 @@ class Komposisi_menu extends CI_Controller {
 	public function index($id)
 	{
 		$this->load->helper('url');
-		$data['page'] = 'Master komposisi_menu';
+		$data['nama_menu'] = $this->komposisi_menu->get_menu($id)->nama_menu;
+		$data['page'] = 'Komposisi Menu '.$data['nama_menu'];
 		$data['content'] = 'pages/komposisi_menu_view';
 		$data['id_menu'] = $id;
-		$data['nama_menu'] = $this->komposisi_menu->get_menu($id)->nama_menu;
 		$data['bahans'] = $this->komposisi_menu->get_bahan();
 		$this->load->view('template/main', $data);
 	}
@@ -31,7 +31,6 @@ class Komposisi_menu extends CI_Controller {
 			$no++;
 			$row = array();
 			$row[] = '<input type="checkbox" class="data-check" value="'.$komposisi_menu->id_composition.'">';
-			$row[] = $komposisi_menu->nama_menu;
 			$row[] = $komposisi_menu->nama_bahan;
 			$row[] = $komposisi_menu->jumlah;
 			$row[] = $komposisi_menu->unitid;
