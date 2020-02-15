@@ -12,7 +12,7 @@ class Laporan_masuk extends CI_Controller {
 	public function index()
 	{
 		$this->load->helper('url');
-		$data['page'] = 'Master laporan_masuk';
+		$data['page'] = 'Laporan Masuk';
 		$data['content'] = 'pages/laporan_masuk_view';
 		$this->load->view('template/main', $data);
 	}
