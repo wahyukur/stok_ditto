@@ -337,18 +337,14 @@ function bulk_delete()
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Unit Group</label>
-                            <div class="col-md-9">
-                                 <select  name="unit_groupid" class="form-control">
-                                    <?php foreach($ambil_unit as $row){?>                    
-                                        <option value="<?php echo $row->unit_groupid;?>"><?php echo $row->unit_groupid;?></option>  
-                                    <?php } ?>
-                                </select>
+                            <div class="col-md-9">         
+                                <input name="unit_groupid" value="<?php echo $foreign_key; ?>" class="form-control " type="text" readonly>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Convertion</label>
                             <div class="col-md-9">
-                                <input name="convertion" placeholder="perbandingan" class="form-control " type="number">
+                                <input name="convertion" placeholder="" class="form-control " type="number">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -387,13 +383,8 @@ function bulk_delete()
                         <div class="form-group">
                             <label class="control-label col-md-3">Unit Group</label>
                             <div class="col-md-9">
-                                <!-- <input name="unit_groupid" placeholder="unit_groupid" class="form-control " type="text">
-                                <span class="help-block"></span> -->
-                                <select  name="unit_groupid" class="form-control">
-                                    <?php foreach($ambil_unit as $row){?>                    
-                                        <option value="<?php echo $row->unit_groupid;?>"><?php echo $row->unit_groupid;?></option>  
-                                    <?php } ?>
-                                </select>
+                                <input name="unit_groupid" placeholder="unit_groupid" class="form-control " type="text">
+                                <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">

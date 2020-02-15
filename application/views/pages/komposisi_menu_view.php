@@ -112,7 +112,7 @@ $(document).ready(function() {
             success: function(data) {
                 var value = JSON.parse(data)
                 console.log(value)
-                $("#unitselected").empty();
+                $("#selectUnit").empty();
                 if (value.length > 0) {
                     var dataSelectUnit = [];
                     for (let index = 0; index < value.length; index++) {

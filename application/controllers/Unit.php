@@ -14,7 +14,7 @@ class Unit extends CI_Controller {
 	{
 		// var_dump($unit_groupid);
 		$this->load->helper('url');
-		$data['page'] = 'Master Unit Convertion';
+		$data['page'] = 'Unit Convertion '.$unit_groupid;
 		$data['content'] = 'pages/unit_view';
 		$data['foreign_key'] = $unit_groupid;
 		$data['ambil_unit'] = $this->unit->ambil_unitgroup();
