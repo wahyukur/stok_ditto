@@ -6,6 +6,9 @@ class Menu extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if (is_logged_in() == false) {
+			redirect(base_url('index.php/'));
+		}
 		$this->load->model('menu_model','menu');
 	}
 
@@ -34,7 +37,7 @@ class Menu extends CI_Controller {
 			//add html for action
 			$row[] = '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="Edit" onclick="edit_menu('."'".$menu->id_menu."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
 				  <a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Hapus" onclick="delete_menu('."'".$menu->id_menu."'".')"><i class="glyphicon glyphicon-trash"></i> Delete</a>
-				  <a class="btn btn-sm btn-success" href="javascript:void(0)" title="Detail" onclick="detail('."'".$menu->id_menu."'".')"><i class="glyphicon glyphicon-trash"></i> Detail</a>';
+				  <a class="btn btn-sm btn-success" href="javascript:void(0)" title="Detail" onclick="detail('."'".$menu->id_menu."'".')"><i class="glyphicon glyphicon-plus"></i> Komposisi</a>';
 		
 			$data[] = $row;
 		}

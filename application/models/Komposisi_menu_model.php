@@ -16,10 +16,11 @@ class Komposisi_menu_model extends CI_Model {
 
 	private function _get_datatables_query($id)
 	{
-		$this->db->select('komposisi_menu.*, bahan.*, menu.*');
+		$this->db->select('komposisi_menu.*, bahan.*, menu.*, unit.unitid');
 		$this->db->from('komposisi_menu');
 		$this->db->join('bahan', 'komposisi_menu.id_bahan = bahan.id_bahan', 'left');
 		$this->db->join('menu', 'komposisi_menu.id_menu = menu.id_menu', 'left');
+		$this->db->join('unit', 'komposisi_menu.unitid = unit.id_unit', 'left');
 		$this->db->where('komposisi_menu.id_menu', $id);
 
 		$i = 0;

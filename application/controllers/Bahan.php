@@ -6,6 +6,9 @@ class Bahan extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if (is_logged_in() == false) {
+			redirect(base_url('index.php/'));
+		}
 		$this->load->model('bahan_model','bahan');
 	}
 

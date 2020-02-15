@@ -17,7 +17,7 @@
                         <th>Unit Group ID</th>
                         <th>Description</th>
                         <th>Created At</th>
-                        <th style="width:210px;">Action</th>
+                        <th style="width:230px;">Action</th>
                     </tr>
                 </thead>
                 <tbody>

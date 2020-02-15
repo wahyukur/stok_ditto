@@ -6,6 +6,9 @@ class Stok_bahan extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if (is_logged_in() == false) {
+			redirect(base_url('index.php/'));
+		}
 		$this->load->model('stok_bahan_model','stok_bahan');
 	}
 

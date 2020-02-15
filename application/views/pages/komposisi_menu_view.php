@@ -14,10 +14,9 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="check-all"></th>
-                        <th>Menu</th>
                         <th>Bahan</th>
-                         <th>Jumlah</th>
-                         <th>Unit</th>
+                        <th>Jumlah</th>
+                        <th>Unit</th>
                         <th style="width:150px;">Action</th>
                     </tr>
                 </thead>
@@ -105,7 +104,7 @@ $(document).ready(function() {
 
     $("#id_bahan").on('change', function(){
         var id = $("#id_bahan").val()
-        console.log(id);
+        // console.log(id);
         $.ajax({
             type: "POST",
             url: "<?php echo site_url('komposisi_menu/get_ug')?>",
@@ -126,6 +125,32 @@ $(document).ready(function() {
         })
     
     })
+
+    $("#bahan").on('change', function(){
+        var id = $("#bahan").val()
+        console.log(id);
+        $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('komposisi_menu/get_ug')?>",
+            data: {id:id},
+            success: function(data) {
+                var value = JSON.parse(data)
+                console.log(value)
+                $("#unitselected").empty();
+                if (value.length > 0) {
+                    var dataSelectUnit = [];
+                    for (let index = 0; index < value.length; index++) {
+                        var option = '<option value="'+value[index]['id_unit']+'">'+value[index]['unitid']+'</option>'
+                        dataSelectUnit.push(option);
+                    }
+                    $("#unitselected").append('<option value="" selected="selected">Pilih Unit</option>'+dataSelectUnit);
+                }
+            }
+        })
+
+    })
+
+    
 });
 
 
@@ -137,7 +162,7 @@ function add_komposisi_menu()
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add komposisi_menu'); // Set Title to Bootstrap modal title
+    $('.modal-title').text('Add Komposisi'); // Set Title to Bootstrap modal title
 
 }
 
@@ -163,7 +188,7 @@ function edit_komposisi_menu(id_composition)
             $('[name="jumlah"]').val(data.jumlah);
             $('[name="unitid"]').val(data.unitid);
             $('#modal_edit').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('Edit komposisi_menu'); // Set title to Bootstrap modal title
+            $('.modal-title').text('Edit Komposisi'); // Set title to Bootstrap modal title
 
 
         },
@@ -411,27 +436,33 @@ function bulk_delete()
             </div>
             <div class="modal-body form">
                 <form action="#" id="form_edit" class="form-horizontal">
-                    <!-- <input type="hidden" value="" name="id_komposisi_menu"/>  -->
+                    <input name="id_menu" value="<?= $id_menu; ?>" type="hidden">
+                    <input name="id_composition" type="hidden">
                     <div class="form-body">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="control-label col-md-3">ID composition</label>
                             <div class="col-md-9">
                                 <input name="id_composition" placeholder="ID composition" class="form-control" type="text" readonly>
                                 <span class="help-block"></span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
-                            <label class="control-label col-md-3">ID Menu</label>
+                            <label class="control-label col-md-3">Nama Menu</label>
                             <div class="col-md-9">
-                                <input name="id_menu" placeholder="id_menu" class="form-control" type="text">
+                                <input name="nama_menu" value="<?= $nama_menu; ?>" class="form-control" type="text" readonly>
                                 <span class="help-block"></span>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="control-label col-md-3">ID Bahan</label>
+                            <label class="control-label col-md-3">Bahan</label>
                             <div class="col-md-9">
-                                <input name="id_bahan" placeholder="id_bahan" class="form-control " type="text">
-                                <span class="help-block"></span>
+                                <select  name="id_bahan" class="form-control" id="bahan">
+                                    <option value="" selected="selected">Pilih Bahan</option>
+                                    <?php foreach($bahans as $row){?>
+                                        <option value="<?php echo $row->id_bahan;?>"><?php echo $row->nama_bahan;?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
@@ -441,10 +472,19 @@ function bulk_delete()
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="control-label col-md-3">Unit</label>
                             <div class="col-md-9">
                                 <input name="unitid" placeholder="Unit" class="form-control " type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Unit</label>
+                            <div class="col-md-9">
+                                <select name="unitid" id="unitselected" class="form-control">
+                                    <option value="" selected="selected">Pilih Unit</option>
+                                </select>
                                 <span class="help-block"></span>
                             </div>
                         </div>

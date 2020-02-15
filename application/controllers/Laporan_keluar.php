@@ -6,6 +6,9 @@ class Laporan_keluar extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		if (is_logged_in() == false) {
+			redirect(base_url('index.php/'));
+		}
 		$this->load->model('laporan_keluar_model','laporan_keluar');
 	}
 
@@ -15,6 +18,7 @@ class Laporan_keluar extends CI_Controller {
 		$data['page'] = 'Master laporan_keluar';
 		$data['content'] = 'pages/laporan_keluar_view';
 		$this->load->view('template/main', $data);
+		/// ad
 	}
 
 	public function ajax_list()
