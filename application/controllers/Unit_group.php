@@ -10,13 +10,16 @@ class Unit_group extends CI_Controller {
 			redirect(base_url('index.php/'));
 		}
 		$this->load->model('unit_group_model','unit_group');
+		$this->load->model('unit_model','unit');
 	}
 
-	public function index()
+	public function index($id = NULL)
 	{
 		$this->load->helper('url');
 		$data['page'] = 'Master Unit';
 		$data['content'] = 'pages/unit_group_view';
+		
+		$data['foreign_key'] = ( $id!=NULL ) ? $id : 'KG';
 		$this->load->view('template/main', $data);
 	}
 
@@ -38,7 +41,7 @@ class Unit_group extends CI_Controller {
 			//add html for action
 			$row[] = '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="Ed1t" onclick="edit_unit_group('."'".$unit_group->unit_groupid."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
 				  <a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Hapus" onclick="delete_unit_group('."'".$unit_group->unit_groupid."'".')"><i class="glyphicon glyphicon-trash"></i> Delete</a>
-				  <a class="btn btn-sm btn-success" href="javascript:void(0)" title="Detail" onclick="detail('."'".$unit_group->unit_groupid."'".')"><i class="glyphicon glyphicon-plus"></i> Koneversi</a>';
+				  <a class="btn btn-sm btn-info" href="javascript:void(0)" title="Detail" onclick="detail('."'".$unit_group->unit_groupid."'".')"><i class="fas fa-info-circle"></i> Koneversi</a>';
 		
 			$data[] = $row;
 		}
@@ -132,6 +135,141 @@ class Unit_group extends CI_Controller {
 			$data['status'] = FALSE;
 		}
 		
+
+		if($data['status'] === FALSE)
+		{
+			echo json_encode($data);
+			exit();
+		}
+	}
+
+	/// ------------------------------------------------------- UNIT ----------------------------------------- ///
+
+	public function ajax_list_unit($id)
+	{
+		$list = $this->unit->get_datatables($id);
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $unit) {
+			$no++;
+			$row = array();
+			$row[] = '<input type="checkbox" class="data-check" value="'.$unit->id_unit.'">';
+			$row[] = $unit->unitid;
+			// $row[] = $unit->unit_groupid;
+			$row[] = $unit->convertion;
+
+			//add html for action
+			$row[] = '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="Ed1t" onclick="edit_unit('."'".$unit->id_unit."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+				  <a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Hapus" onclick="delete_unit('."'".$unit->id_unit."'".')"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+		
+			$data[] = $row;
+		}
+
+		// var_dump($unit->id_unit);
+
+		$output = array(
+						"draw" => $_POST['draw'],
+						"recordsTotal" => $this->unit->count_all($id),
+						"recordsFiltered" => $this->unit->count_filtered($id),
+						"data" => $data,
+				);
+		//output to json format
+		echo json_encode($output);
+	}
+
+	public function ajax_edit_unit($id_unit)
+	{	
+		$data = $this->unit->get_by_id($id_unit);
+		//$data->created_at =  ($data->created_at == '0000-00-00') ? '' : $data->created_at;
+		
+		echo json_encode($data);
+
+	}
+
+	public function ajax_add_unit()
+	{
+		$this->_validate_unit();
+		
+		$units = $this->input->post('unitid');
+		$group = $this->input->post('unit_groupid');
+		$ambil_units = $this->unit->selectUnit();
+		$cek = FALSE;
+
+		foreach ($ambil_units as $key) {
+			if ($units == $key->unitid && $group == $key->unit_groupid) {
+				$cek = TRUE;
+			}
+		}
+
+		
+		if ($cek == false) {
+			$data = array(
+				'unitid' => $this->input->post('unitid'),
+				'unit_groupid' => $this->input->post('unit_groupid'),
+				'convertion' => $this->input->post('convertion')
+			);
+
+			$insert = $this->unit->save($data);
+			echo json_encode(array("status" => TRUE));
+		}
+		
+	}
+
+
+	public function ajax_update_unit()
+	{
+		$this->_validate_unit();
+		$data = array(
+				'unitid' => $this->input->post('unitid'),
+				'unit_groupid' => $this->input->post('unit_groupid'),
+				'convertion' => $this->input->post('convertion')
+			);
+		$this->unit->update(array('id_unit' => $this->input->post('id_unit')), $data);
+		echo json_encode(array("status" => TRUE));
+	}
+
+	public function ajax_delete_unit($id_unit)
+	{
+		$this->unit->delete_by_id($id_unit);
+		echo json_encode(array("status" => TRUE));
+	}
+
+	public function ajax_bulk_delete_unit()
+	{
+		$list_id = $this->input->post('id_unit');
+		foreach ($list_id as $id_unit) {
+			$this->unit->delete_by_id($id_unit);
+		}
+		echo json_encode(array("status" => TRUE));
+	}
+
+	private function _validate_unit()
+	{
+		$data = array();
+		$data['error_string'] = array();
+		$data['inputerror'] = array();
+		$data['status'] = TRUE;
+
+		if($this->input->post('unitid') == '')
+		{
+			$data['inputerror'][] = 'unitid';
+			$data['error_string'][] = 'isi unit';
+			$data['status'] = FALSE;
+		}
+
+		if($this->input->post('unit_groupid') == '')
+		{
+			$data['inputerror'][] = 'unit_groupid';
+			$data['error_string'][] = 'isi unit';
+			$data['status'] = FALSE;
+		}
+		if($this->input->post('convertion') == '')
+		{
+			$data['inputerror'][] = 'convertion';
+			$data['error_string'][] = 'isi convertion';
+			$data['status'] = FALSE;
+		}
+
 
 		if($data['status'] === FALSE)
 		{

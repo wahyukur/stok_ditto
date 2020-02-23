@@ -68,6 +68,7 @@ class Laporan_masuk extends CI_Controller {
 
 		$tipe = 'IN'; // IN
 		$date = date('my', strtotime($this->input->post('tanggal_masuk'))); // bulan tahun cth : 0220 -> bulan 02, tahun 20
+		// $current
 		$kode = $this->laporan_masuk->get_for_check(); 
 		$urutan = $kode + 1;
 		$id_masuk = $tipe . $date . sprintf("%03s", $urutan);
