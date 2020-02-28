@@ -18,8 +18,8 @@ class Unit_group extends CI_Controller {
 		$this->load->helper('url');
 		$data['page'] = 'Master Unit';
 		$data['content'] = 'pages/unit_group_view';
-		
-		$data['foreign_key'] = ( $id!=NULL ) ? $id : 'KG';
+		$sub_id = $this->unit->get_unitid();
+		$data['foreign_key'] = ( $id!=NULL ) ? $id : $sub_id;
 		$this->load->view('template/main', $data);
 	}
 
@@ -77,7 +77,6 @@ class Unit_group extends CI_Controller {
 				'unit_groupid' => $this->input->post('unit_groupid'),
 				'description' => $this->input->post('description'),
 				'created_at' => $tanggal
-				
 			);
 
 
@@ -153,7 +152,7 @@ class Unit_group extends CI_Controller {
 		foreach ($list as $unit) {
 			$no++;
 			$row = array();
-			$row[] = '<input type="checkbox" class="data-check" value="'.$unit->id_unit.'">';
+			$row[] = '<input type="checkbox" class="data-check-unit" value="'.$unit->id_unit.'">';
 			$row[] = $unit->unitid;
 			// $row[] = $unit->unit_groupid;
 			$row[] = $unit->convertion;

@@ -1,13 +1,16 @@
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?php echo $page; ?></h1>
-    <div class="col-m-2">
-        <button class="btn btn-danger" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
-        <button class="btn btn-success" onclick="add_bahan()"><i class="glyphicon glyphicon-plus"></i> Add bahan</button>
-    </div>
-    
-</div>
-
 <div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary"><?php echo $page; ?></h6>
+    </div>
+
+    <button onclick="bulk_delete()" class="btn btn-danger btn-icon-split"><span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+        <span class="text">HAPUS PILIHAN</span>
+    </button>
+
+    <button onclick="add_bahan()" class="btn btn-success btn-icon-split"><span class="icon text-white-50"><i class="glyphicon glyphicon-plus"></i></span>
+        <span class="text">TAMBAH</span>
+    </button>
+
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-striped" id="table" width="100%" cellspacing="0" >
@@ -327,7 +330,7 @@ function bulk_delete()
                         <div class="form-group">
                             <label class="control-label col-md-3">Nama Bahan</label>
                             <div class="col-md-9">
-                                <input name="nama_bahan" placeholder="nama_bahan" class="form-control" type="text">
+                                <input name="nama_bahan" placeholder="Masukkan Nama Bahan" class="form-control" type="text">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -372,15 +375,15 @@ function bulk_delete()
             </div>
             <div class="modal-body form">
                 <form action="#" id="form_edit" class="form-horizontal">
-                    <!-- <input type="hidden" value="" name="id_bahan"/>  -->
+                    <input type="hidden" value="" name="id_bahan"/> 
                     <div class="form-body">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="control-label col-md-3">ID bahan</label>
                             <div class="col-md-9">
                                 <input name="id_bahan" placeholder="ID bahan" class="form-control" type="text" readonly>
                                 <span class="help-block"></span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label class="control-label col-md-3">Nama Bahan</label>
                             <div class="col-md-9">
@@ -398,13 +401,13 @@ function bulk_delete()
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="control-label col-md-3">created_at</label>
                             <div class="col-md-9">
                                 <input name="created_at" placeholder="created_at" class="form-control " type="text" readonly>
                                 <span class="help-block"></span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </form>
             </div>

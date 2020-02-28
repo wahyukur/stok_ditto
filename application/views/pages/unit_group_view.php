@@ -1,6 +1,6 @@
 <!-- <div class="container"> -->
   <div class="row">
-    <div class="col-8">
+    <div class="col-7">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"><?php echo $page; ?></h6>
@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="col-4">
+    <div class="col-5">
         <div class="card shadow mb-4">
         <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"><?php echo $foreign_key; ?></h6>
@@ -49,10 +49,10 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="table2" width="100%" cellspacing="0" >
+                    <table class="table2 table-striped" id="table2" width="100%" cellspacing="0" >
                         <thead>
                             <tr>
-                                <th><input type="checkbox" id="check-all"></th>
+                                <th><input type="checkbox" id="check-all-unit"></th>
                                 <th>Unit ID</th>
                                 <!-- <th>Unit Group ID</th> -->
                                 <th>Convertion</th>
@@ -81,6 +81,7 @@
 
 var save_method; 
 var table;
+var table2;
 var base_url = '<?php echo base_url();?>';
 var foreign_key = '<?php echo $foreign_key; ?>';
 
@@ -172,6 +173,9 @@ $(document).ready(function() {
         $(".data-check").prop('checked', $(this).prop('checked'));
     });
 
+    $("#check-all-unit").click(function () {
+        $(".data-check-unit").prop('checked', $(this).prop('checked'));
+    });
 });
 
 
@@ -183,7 +187,7 @@ function add_unit_group()
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add Master Unit Group'); // Set Title to Bootstrap modal title
+    $('.modal-title').text('Add Unit Group'); // Set Title to Bootstrap modal title
 
 }
 
@@ -386,12 +390,14 @@ function detail(unit_groupid) {
     window.location = "<?php echo base_url(); ?>index.php/unit_group/index/"+unit_groupid;
 }
 
+//  -------------------------------------------------- Unit ----------------------------------------------------//
+
 function add_unit()
 {
     save_method = 'add';
     $('#form_unit')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
-    $('.help-block').empty(); // clear error string
+    $('.help-block-unit').empty(); // clear error string
     $('#modal_form_unit').modal('show'); // show bootstrap modal
     $('.modal-title').text('Add Unit'); // Set Title to Bootstrap modal title
 
@@ -402,7 +408,7 @@ function edit_unit(id_unit)
     save_method = 'update';
     $('#form_edit_unit')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
-    $('.help-block').empty(); // clear error string
+    $('.help-block-unit').empty(); // clear error string
 
 
     //Ajax Load data from ajax
@@ -556,7 +562,7 @@ function delete_unit(id_unit)
 function bulk_delete_unit()
 {
     var list_id = [];
-    $(".data-check:checked").each(function() {
+    $(".data-check-unit:checked").each(function() {
             list_id.push(this.value);
     });
     if(list_id.length > 0)
@@ -605,7 +611,6 @@ function bulk_delete_unit()
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="unit_groupid"/> 
                     <div class="form-body">
                         <div class="form-group">
                             <label class="control-label col-md-3">Unit Group ID</label>
@@ -700,7 +705,7 @@ function bulk_delete_unit()
                             <label class="control-label col-md-3">Unit</label>
                             <div class="col-md-9">
                                 <input name="unitid" placeholder="cth : sendok / liter / pcs / etc" class="form-control " type="text">
-                                <span class="help-block"></span>
+                                <span class="help-block-unit"></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -713,7 +718,7 @@ function bulk_delete_unit()
                             <label class="control-label col-md-3">Convertion</label>
                             <div class="col-md-9">
                                 <input name="convertion" placeholder="" class="form-control " type="number">
-                                <span class="help-block"></span>
+                                <span class="help-block-unit"></span>
                             </div>
                         </div>
                     </div>
@@ -743,7 +748,7 @@ function bulk_delete_unit()
                             <label class="control-label col-md-3">Unit</label>
                             <div class="col-md-9">
                                 <input name="unitid" placeholder="cth : sendok / liter / pcs / etc" class="form-control" type="text">
-                                <span class="help-block"></span>
+                                <span class="help-block-unit"></span>
                             </div>
                         </div>
                         
@@ -751,14 +756,14 @@ function bulk_delete_unit()
                             <label class="control-label col-md-3">Unit Group</label>
                             <div class="col-md-9">
                                 <input name="unit_groupid" placeholder="unit_groupid" class="form-control " type="text" readonly>
-                                <span class="help-block"></span>
+                                <span class="help-block-unit"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-md-3">Convertion</label>
                             <div class="col-md-9">
                                 <input name="convertion" placeholder="convertion" class="form-control " type="number">
-                                <span class="help-block"></span>
+                                <span class="help-block-unit"></span>
                             </div>
                         </div>
                     </div>
@@ -768,7 +773,6 @@ function bulk_delete_unit()
                 <button type="button" id="btnUpdateUnit" onclick="update_unit()" class="btn btn-primary">Save</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!-- End Bootstrap modal -->
+        </div>
+    </div>
+</div>
