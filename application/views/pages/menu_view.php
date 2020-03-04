@@ -1,11 +1,3 @@
-<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?php echo $page; ?></h1>
-    <div class="col-m-2">
-        <button class="btn btn-danger" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
-        <button class="btn btn-success" onclick="add_menu()"><i class="glyphicon glyphicon-plus"></i> Add menu</button>
-    </div>
-</div> -->
-
 <div class="row">
     <div class="col-sm">
         <div class="card shadow mb-4">

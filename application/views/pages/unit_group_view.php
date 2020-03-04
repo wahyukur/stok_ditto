@@ -399,7 +399,7 @@ function add_unit()
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block-unit').empty(); // clear error string
     $('#modal_form_unit').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add Unit'); // Set Title to Bootstrap modal title
+    $('.modal-title').text('Add Satuan'); // Set Title to Bootstrap modal title
 
 }
 
@@ -424,7 +424,7 @@ function edit_unit(id_unit)
             $('[name="unit_groupid"]').val(data.unit_groupid);
             $('[name="convertion"]').val(data.convertion);
             $('#modal_edit_unit').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('Edit Unit'); // Set title to Bootstrap modal title
+            $('.modal-title').text('Edit Satuan'); // Set title to Bootstrap modal title
 
 
         },
@@ -702,7 +702,7 @@ function bulk_delete_unit()
                     <input type="hidden" value="" name="id_unit"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Unit</label>
+                            <label class="control-label col-md-3">Satuan</label>
                             <div class="col-md-9">
                                 <input name="unitid" placeholder="cth : sendok / liter / pcs / etc" class="form-control " type="text">
                                 <span class="help-block-unit"></span>
@@ -745,7 +745,7 @@ function bulk_delete_unit()
                     <input type="hidden" value="" name="id_unit"/> 
                     <div class="form-body">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Unit</label>
+                            <label class="control-label col-md-3">Satuan</label>
                             <div class="col-md-9">
                                 <input name="unitid" placeholder="cth : sendok / liter / pcs / etc" class="form-control" type="text">
                                 <span class="help-block-unit"></span>

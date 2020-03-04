@@ -1,12 +1,52 @@
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?php echo $page; ?></h1>
-    <div class="col-m-2">
-        <button class="btn btn-success" onclick="add_laporan_masuk()"><i class="glyphicon glyphicon-plus"></i> Buat Laporan Receiving</button>
-    </div>
-    
-</div>
+<style>
+    .button {
+        border-radius: 20px;
+        background-color: #508aab;
+        border: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 12px;
+        padding: 10px;
+        width: 100px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+    }
 
+    .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+    .button span:after {
+        content: '\00bb';
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+    }
+
+    .button:hover span {
+        padding-right: 25px;
+    }
+
+    .button:hover span:after {
+        opacity: 1;
+        right: 0;
+    }
+</style>
 <div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary"><?php echo $page; ?></h6>
+    </div>
+
+    <button onclick="add_laporan_masuk()" class="btn btn-success btn-icon-split"><span class="icon text-white-50"><i class="glyphicon glyphicon-plus"></i></span>
+        <span class="text">TAMBAH</span>
+    </button>
+
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-striped" id="table" width="100%" cellspacing="0" >
@@ -14,7 +54,6 @@
                     <tr>
                         <th>Nomor Receiving</th>
                         <th>Tanggal Bahan Masuk</th>
-                        <th>Total Harga</th>
                         <th style="width:150px;">Action</th>
                     </tr>
                 </thead>
@@ -141,6 +180,7 @@ function save()
             {
                 $('#modal_form').modal('hide');
                 reload_table();
+                window.location.href = "<?php echo site_url('laporan_masuk/dtl')?>/"+data.id_masuk;
             }
             else
             {
@@ -165,156 +205,8 @@ function save()
     });
 }
 
-// function edit_laporan_masuk(id_laporan_masuk)
-// {
-//     save_method = 'update';
-//     $('#form_edit')[0].reset(); // reset form on modals
-//     $('.form-group').removeClass('has-error'); // clear error class
-//     $('.help-block').empty(); // clear error string
-
-
-//     //Ajax Load data from ajax
-//     $.ajax({
-//         url : "<!?php echo site_url('laporan_masuk/ajax_edit')?>/" + id_laporan_masuk,
-//         type: "GET",
-//         dataType: "JSON",
-//         success: function(data)
-//         {
-
-//             $('[name="id_laporan_masuk"]').val(data.id_laporan_masuk);
-//             $('[name="id_periode"]').val(data.id_periode);
-//             $('[name="id_bahan"]').val(data.id_bahan);
-//             $('[name="jumlah_bahan"]').val(data.jumlah_bahan);
-//             $('[name="unitid"]').val(data.unitid);
-//             $('[name="tanggal_masuk"]').val(data.tanggal_masuk);
-//             $('[name="approved_"]').val(data.approved_);
-//             $('#modal_edit').modal('show'); // show bootstrap modal when complete loaded
-//             $('.modal-title').text('Edit laporan_masuk'); // Set title to Bootstrap modal title
-
-
-//         },
-//         error: function (jqXHR, textStatus, errorThrown)
-//         {
-//             alert('Error get data from ajax');
-//         }
-//     });
-// }
-
-
-// function update_()
-// {
-//     $('#btnUpdate').text('updating...'); 
-//     $('#btnUpdate').attr('disabled',true);  
-//     var url;
-//     url = "<!?php echo site_url('laporan_masuk/ajax_update')?>";
-    
-//     // ajax adding data to database
-//     var formData = new FormData($('#form_edit')[0]);
-//     $.ajax({
-//         url : url,
-//         type: "POST",
-//         data: formData,
-//         contentType: false,
-//         processData: false,
-//         dataType: "JSON",
-//         success: function(data)
-//         {
-
-//             if(data.status)
-//             {
-//                 $('#modal_edit').modal('hide');
-//                 reload_table();
-//             }
-//             else
-//             {
-//                 for (var i = 0; i < data.inputerror.length; i++) 
-//                 {
-//                     $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-error'); 
-//                     $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); 
-//                 }
-//             }
-//             $('#btnUpdate').text('save'); 
-//             $('#btnUpdate').attr('disabled',false); 
-
-
-//         },
-//         error: function (jqXHR, textStatus, errorThrown)
-//         {
-//             alert('Error update data');
-//             $('#btnUpdate').text('save'); 
-//             $('#btnUpdate').attr('disabled',false); 
-
-//         }
-//     });
-// }
-
-// function delete_laporan_masuk(id_laporan_masuk)
-// {
-//     if(confirm('Are you sure delete this data?'))
-//     {
-//         // ajax delete data to database
-//         $.ajax({
-//             url : "<!?php echo site_url('laporan_masuk/ajax_delete')?>/"+id_laporan_masuk,
-//             type: "POST",
-//             dataType: "JSON",
-//             success: function(data)
-//             {
-//                 //if success reload ajax table
-//                 $('#modal_form').modal('hide');
-//                 reload_table();
-//             },
-//             error: function (jqXHR, textStatus, errorThrown)
-//             {
-//                 alert('Error deleting data');
-//             }
-//         });
-
-//     }
-// }
-
-
-// function bulk_delete()
-// {
-//     var list_id = [];
-//     $(".data-check:checked").each(function() {
-//             list_id.push(this.value);
-//     });
-//     if(list_id.length > 0)
-//     {
-//         if(confirm('Are you sure delete this '+list_id.length+' data?'))
-//         {
-//             $.ajax({
-//                 type: "POST",
-//                 data: {id_laporan_masuk:list_id},
-//                 url: "<!?php echo site_url('laporan_masuk/ajax_bulk_delete')?>",
-//                 dataType: "JSON",
-//                 success: function(data)
-//                 {
-//                     if(data.status)
-//                     {
-//                         reload_table();
-//                     }
-//                     else
-//                     {
-//                         alert('Failed.');
-//                     }
-                    
-//                 },
-//                 error: function (jqXHR, textStatus, errorThrown)
-//                 {
-//                     alert('Error deleting data');
-//                 }
-//             });
-//         }
-//     }
-//     else
-//     {
-//         alert('no data selected');
-//     }
-// }
-
 function detail(id_masuk) {
-    window.location = "<?php echo base_url(); ?>index.php/laporan_masuk/detail/"+id_masuk;
+    window.location = "<?php echo base_url(); ?>index.php/laporan_masuk/dtl/"+id_masuk;
 }
 
 </script>

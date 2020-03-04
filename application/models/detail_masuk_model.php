@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Detail_masuk_model extends CI_Model {
 
 	var $table = 'masuk_detail';
-	var $column_order = array(null,'id','id_masuk','id_bahan','qty','id_unit','unitprice',null); //set column field database for datatable orderable
-	var $column_search = array('id','id_masuk','id_bahan','qty','id_unit','unitprice'); //set column field database for datatable searchable just nama_masuk_detail , category , address are searchable
+	var $column_order = array(null,'id_masuk','id_bahan','qty','id_unit',null); //set column field database for datatable orderable
+	var $column_search = array('id_masuk','id_bahan','qty','id_unit'); //set column field database for datatable searchable just nama_masuk_detail , category , address are searchable
 	var $order = array('id' => 'asc'); // default order 
 
 	public function __construct()
@@ -80,10 +80,10 @@ class Detail_masuk_model extends CI_Model {
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($id_masuk_detail)
+	public function get_by_id($id)
 	{
 		$this->db->from($this->table);
-		$this->db->where('id_masuk_detail',$id_masuk_detail);
+		$this->db->where('id',$id);
 		$query = $this->db->get();
 
 		return $query->row();
@@ -101,9 +101,9 @@ class Detail_masuk_model extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
-	public function delete_by_id($id_masuk_detail)
+	public function delete_by_id($id)
 	{
-		$this->db->where('id_masuk_detail', $id_masuk_detail);
+		$this->db->where('id', $id);
 		$this->db->delete($this->table);
 	}
 

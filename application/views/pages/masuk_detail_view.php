@@ -1,33 +1,69 @@
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?php echo $page; ?></h1>
-    <div class="col-m-2">
-        <button class="btn btn-danger" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
-        <button class="btn btn-success" onclick="add_detail()"><i class="glyphicon glyphicon-plus"></i> Add</button>
-    </div>
-    
-</div>
+<style>
+    .tulisan_apik{
+        text-align: center;
+        font-family:Impact;
+        font-size:150%;
+    }
 
-<div class="card shadow mb-4">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped" id="table" width="100%" cellspacing="0" >
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Nomor Receiving</th>
-                        <th>Nama Bahan</th>
-                        <th>Qty</th>
-                        <th>Harga Unit</th>
-                        <th style="width:150px;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    .tulisan_tanggal{
+        text-align: center;
+        font-family:courier;
+        font-size:150%;
+    }
+</style>
+
+<div class="row">
+    <div class="col-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Header</h6>
+            </div>
+            <div class="card-body">
+                <div class = "row">
+                    <div class="col-12">
+                        <p class="tulisan_apik"> <?php echo $id_masuk; ?></p>
+                        <p class="tulisan_tanggal"> <?php echo date('d F Y', strtotime($tgl_masuk)); ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
+    <div class="col-9">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Detail</h6>
+            </div>
+
+            <button onclick="bulk_delete()" class="btn btn-danger btn-icon-split"><span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+                <span class="text">HAPUS PILIHAN</span>
+            </button>
+
+            <button onclick="add_detail()" class="btn btn-success btn-icon-split"><span class="icon text-white-50"><i class="glyphicon glyphicon-plus"></i></span>
+                <span class="text">TAMBAH</span>
+            </button>
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="table" width="100%" cellspacing="0" >
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nama Bahan</th>
+                                <th>Qty</th>
+                                <th>Unit Satuan</th>
+                                <th style="width:150px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <script src="<?php echo base_url('assets/asetku/jquery/jquery-2.1.4.min.js')?>"></script>
 <script src="<?php echo base_url('assets/asetku/bootstrap/js/bootstrap.min.js')?>"></script>
@@ -103,6 +139,54 @@ $(document).ready(function() {
         $(".data-check").prop('checked', $(this).prop('checked'));
     });
 
+    $("#id_bahan").on('change', function(){
+        var id = $("#id_bahan").val()
+        console.log(id);
+        $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('laporan_masuk/get_ug')?>",
+            data: {id:id},
+            success: function(data) {
+                var value = JSON.parse(data)
+                console.log(value)
+                $("#selectUnit").empty();
+                if (value.length > 0) {
+                    var dataSelectUnit = [];
+                    for (let index = 0; index < value.length; index++) {
+                        var option = '<option value="'+value[index]['id_unit']+'">'+value[index]['unitid']+'</option>'
+                        dataSelectUnit.push(option);
+                    }
+                    $("#selectUnit").append('<option value="" selected="selected">Pilih Unit</option>'+dataSelectUnit);
+                }
+            }
+        })
+    
+    })
+
+    $("#bahan").on('change', function(){
+        var id = $("#bahan").val()
+        console.log(id);
+        $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('laporan_masuk/get_ug')?>",
+            data: {id:id},
+            success: function(data) {
+                var value = JSON.parse(data)
+                console.log(value)
+                $("#unitselected").empty();
+                if (value.length > 0) {
+                    var dataSelectUnit = [];
+                    for (let index = 0; index < value.length; index++) {
+                        var option = '<option value="'+value[index]['id_unit']+'">'+value[index]['unitid']+'</option>'
+                        dataSelectUnit.push(option);
+                    }
+                    $("#unitselected").append('<option value="" selected="selected">Pilih Unit</option>'+dataSelectUnit);
+                }
+            }
+        })
+
+    })
+
 });
 
 
@@ -118,7 +202,7 @@ function add_detail()
 
 }
 
-function edit_laporan_masuk(id_laporan_masuk)
+function edit_detail(id)
 {
     save_method = 'update';
     $('#form_edit')[0].reset(); // reset form on modals
@@ -128,21 +212,21 @@ function edit_laporan_masuk(id_laporan_masuk)
 
     //Ajax Load data from ajax
     $.ajax({
-        url : "<?php echo site_url('laporan_masuk/ajax_edit')?>/" + id_laporan_masuk,
+        url : "<?php echo site_url('laporan_masuk/ajax_edit')?>/" + id,
         type: "GET",
         dataType: "JSON",
         success: function(data)
         {
+            
+            console.log(data);
 
-            $('[name="id_laporan_masuk"]').val(data.id_laporan_masuk);
-            $('[name="id_periode"]').val(data.id_periode);
+            $('[name="id"]').val(data.id);
+            $('[name="id_masuk"]').val(data.id_masuk);
             $('[name="id_bahan"]').val(data.id_bahan);
-            $('[name="jumlah_bahan"]').val(data.jumlah_bahan);
+            $('[name="jumlah_bahan"]').val(data.qty);
             $('[name="unitid"]').val(data.unitid);
-            $('[name="tanggal_masuk"]').val(data.tanggal_masuk);
-            $('[name="approved_"]').val(data.approved_);
             $('#modal_edit').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('Edit laporan_masuk'); // Set title to Bootstrap modal title
+            $('.modal-title').text('Edit Detail'); // Set title to Bootstrap modal title
 
 
         },
@@ -163,7 +247,7 @@ function save()
     $('#btnSave').text('saving...'); 
     $('#btnSave').attr('disabled',true);  
     var url;
-    url = "<?php echo site_url('laporan_masuk/ajax_add')?>";
+    url = "<?php echo site_url('laporan_masuk/ajax_add_detail')?>";
     
     var formData = new FormData($('#form')[0]);
     $.ajax({
@@ -209,7 +293,7 @@ function update_()
     $('#btnUpdate').text('updating...'); 
     $('#btnUpdate').attr('disabled',true);  
     var url;
-    url = "<!?php echo site_url('laporan_masuk/ajax_update')?>";
+    url = "<?php echo site_url('laporan_masuk/ajax_update')?>";
     
     // ajax adding data to database
     var formData = new FormData($('#form_edit')[0]);
@@ -251,13 +335,13 @@ function update_()
     });
 }
 
-function delete_laporan_masuk(id_laporan_masuk)
+function delete_detail(id)
 {
     if(confirm('Are you sure delete this data?'))
     {
         // ajax delete data to database
         $.ajax({
-            url : "<!?php echo site_url('laporan_masuk/ajax_delete')?>/"+id_laporan_masuk,
+            url : "<?php echo site_url('laporan_masuk/ajax_delete')?>/"+id,
             type: "POST",
             dataType: "JSON",
             success: function(data)
@@ -329,49 +413,34 @@ function bulk_delete()
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="id_laporan_masuk"/> 
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label class="control-label col-md-3">id_periode</label>
-                            <div class="col-md-9">
-                                <input name="id_periode" placeholder="id_periode" class="form-control" type="text">
-                                <span class="help-block"></span>
-                            </div>
+                    <input type="hidden" value="<?php echo $id_masuk; ?>" name="id_masuk"/> 
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Bahan</label>
+                        <div class="col-md-9">
+                            <!-- <input name="id_bahan" placeholder="ID bahan" class="form-control " type="text">
+                            <span class="help-block"></span> -->
+                            <select  name="id_bahan" class="form-control" id="id_bahan">
+                                <option value="" selected="selected">Pilih Bahan</option>
+                                <?php foreach($bahans as $row){?>
+                                    <option value="<?php echo $row->id_bahan;?>"><?php echo $row->nama_bahan;?></option>
+                                <?php } ?>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">id_bahan</label>
-                            <div class="col-md-9">
-                                <input name="id_bahan" placeholder="id_bahan" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Qty</label>
+                        <div class="col-md-9">
+                            <input name="jumlah_bahan" class="form-control " type="number">
+                            <span class="help-block"></span>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">jumlah_bahan</label>
-                            <div class="col-md-9">
-                                <input name="jumlah_bahan" placeholder="created_at" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">unitid</label>
-                            <div class="col-md-9">
-                                <input name="unitid" placeholder="unitid" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">tanggal_masuk</label>
-                            <div class="col-md-9">
-                                <input name="tanggal_masuk" placeholder="tanggal_masuk" class="form-control datepicker" type="datepicker">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">approved_</label>
-                            <div class="col-md-9">
-                                <input name="approved_" placeholder="approved_" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Unit</label>
+                        <div class="col-md-9">
+                            <select name="unitid" id="selectUnit" class="form-control">
+                                <option value="" selected="selected">Pilih Unit</option>
+                            </select>
+                            <span class="help-block"></span>
                         </div>
                     </div>
                 </form>
@@ -395,54 +464,35 @@ function bulk_delete()
             </div>
             <div class="modal-body form">
                 <form action="#" id="form_edit" class="form-horizontal">
-                    <!-- <input type="hidden" value="" name="id_laporan_masuk"/>  -->
+                    <input type="hidden" name="id"/>
+                    <input type="hidden" name="id_masuk"/>
                     <div class="form-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Bahan</label>
+                        <div class="col-md-9">
+                            <!-- <input name="id_bahan" placeholder="ID bahan" class="form-control " type="text">
+                            <span class="help-block"></span> -->
+                                <select  name="id_bahan" class="form-control" id="bahan">
+                                    <option value="" selected="selected">Pilih Bahan</option>
+                                    <?php foreach($bahans as $row){?>
+                                        <option value="<?php echo $row->id_bahan;?>"><?php echo $row->nama_bahan;?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">ID laporan_masuk</label>
+                            <label class="control-label col-md-3">Qty</label>
                             <div class="col-md-9">
-                                <input name="id_laporan_masuk" placeholder="ID laporan_masuk" class="form-control" type="text" readonly>
+                                <input name="jumlah_bahan" class="form-control " type="number">
                                 <span class="help-block"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">id_periode</label>
+                            <label class="control-label col-md-3">Unit</label>
                             <div class="col-md-9">
-                                <input name="id_periode" placeholder="id_periode" class="form-control" type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">id_bahan</label>
-                            <div class="col-md-9">
-                                <input name="id_bahan" placeholder="id_bahan" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">jumlah_bahan</label>
-                            <div class="col-md-9">
-                                <input name="jumlah_bahan" placeholder="jumlah_bahan" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">unitid</label>
-                            <div class="col-md-9">
-                                <input name="unitid" placeholder="unitid" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">tanggal_masuk</label>
-                            <div class="col-md-9">
-                                <input name="tanggal_masuk" placeholder="tanggal_masuk" class="form-control datepicker" type="datepicker">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">approved</label>
-                            <div class="col-md-9">
-                                <input name="approved_" placeholder="approved_" class="form-control " type="text">
+                                <select name="unitid" id="unitselected" class="form-control">
+                                    <option value="" selected="selected">Pilih Unit</option>
+                                </select>
                                 <span class="help-block"></span>
                             </div>
                         </div>

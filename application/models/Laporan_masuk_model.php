@@ -18,6 +18,7 @@ class laporan_masuk_model extends CI_Model {
 	{
 		
 		$this->db->from($this->table);
+		
 
 		$i = 0;
 	
@@ -75,20 +76,21 @@ class laporan_masuk_model extends CI_Model {
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($id_laporan_masuk)
+	public function get_by_id($id_masuk)
 	{
 		$this->db->from($this->table);
-		$this->db->where('id_laporan_masuk',$id_laporan_masuk);
+		$this->db->where('id_masuk',$id_masuk);
 		$query = $this->db->get();
 
 		return $query->row();
 	}
 
-	public function get_for_check()
+	public function get_for_check($bulan, $tahun)
 	{	
 		$query = $this->db->query("
 			SELECT id_masuk   
 			FROM laporan_masuk 
+			WHERE YEAR(tanggal_masuk) = '$tahun' and MONTH(tanggal_masuk) = '$bulan' 
 		");
 
 		return $query->num_rows();
@@ -97,6 +99,12 @@ class laporan_masuk_model extends CI_Model {
 	public function save($data)
 	{
 		$this->db->insert($this->table, $data);
+		return $this->db->insert_id();
+	}
+
+	public function save_dtl($data)
+	{
+		$this->db->insert('masuk_detail', $data);
 		return $this->db->insert_id();
 	}
 
@@ -112,5 +120,11 @@ class laporan_masuk_model extends CI_Model {
 		$this->db->delete($this->table);
 	}
 
+	public function get_bahan()
+	{
+		$this->db->from('bahan');
+
+		return $this->db->get()->result();
+	}
 
 }
