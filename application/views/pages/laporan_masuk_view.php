@@ -149,7 +149,7 @@ function add_laporan_masuk()
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Buat Header Receiving'); // Set Title to Bootstrap modal title
+    $('.modal-title').text('Buat Header'); // Set Title to Bootstrap modal title
 
 }
 
@@ -252,7 +252,7 @@ function detail(id_masuk) {
                             </div>
                         </div> -->
                         <div class="form-group">
-                            <label class="control-label col-md-3">Tanggal Receiving</label>
+                            <label class="control-label col-md-3">Tanggal Laporan</label>
                             <div class="col-md-9">
                                 <input name="tanggal_masuk" placeholder="Tanggal Buat Laporan" class="form-control datepicker" type="datepicker">
                                 <span class="help-block"></span>

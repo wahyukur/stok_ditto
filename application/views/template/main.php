@@ -61,14 +61,14 @@
       <li class="nav-item active">
         <a class="nav-link"  href="<?php echo base_url('index.php/laporan_keluar') ?>">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Sales Report</span></a>
+          <span>Laporan Penjualan</span></a>
       </li>
 
       <!-- Nav Item - Utilities Collapse Menu -->
       <li class="nav-item active">
         <a class="nav-link"  href="<?php echo base_url('index.php/laporan_masuk') ?>">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Purchasing Report</span></a>
+          <span>Laporan Pembelian</span></a>
       </li>
 
       <!-- Divider -->

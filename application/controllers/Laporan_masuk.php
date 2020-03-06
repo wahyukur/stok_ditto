@@ -17,7 +17,7 @@ class Laporan_masuk extends CI_Controller {
 	public function index()
 	{
 		$this->load->helper('url');
-		$data['page'] = 'Receiving Bahan';
+		$data['page'] = 'Laporan Pembelian';
 		$data['content'] = 'pages/laporan_masuk_view';
 		$this->load->view('template/main', $data);
 	}
@@ -28,7 +28,7 @@ class Laporan_masuk extends CI_Controller {
 		$data['id_masuk'] = $id_masuk;
 		$data['tgl_masuk'] = $this->laporan_masuk->get_by_id($id_masuk)->tanggal_masuk;
 		$data['bahans'] = $this->laporan_masuk->get_bahan();
-		$data['page'] = 'Detail Receiving '.$id_masuk;
+		$data['page'] = 'Detail Pembelian '.$id_masuk;
 		$data['content'] = 'pages/masuk_detail_view';
 		$this->load->view('template/main', $data);
 	}

@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Detail_bahan_keluar_model extends CI_Model {
+class Detail_keluar_model extends CI_Model {
 
-	var $table = 'bahan';
-	var $column_order = array(null,'id_laporan_keluar','id_menu','id_periode','id_bahan','jumlah_bahan_keluar','unitid','tanggal_keluar',null); //set column field database for datatable orderable
-	var $column_search = array('id_laporan_keluar','id_menu','id_periode','id_bahan','jumlah_bahan_keluar','unitid','tanggal_keluar'); //set column field database for datatable searchable just nama_bahan , category , address are searchable
-	var $order = array('id_bahan' => 'desc'); // default order 
+	var $table = 'keluar_detail';
+	var $column_order = array(null,'id_keluar','id_menu','qty',null); //set column field database for datatable orderable
+	var $column_search = array('id_keluar','id_menu','qty'); //set column field database for datatable searchable just nama_keluar_detail , category , address are searchable
+	var $order = array('id' => 'asc'); // default order 
 
 	public function __construct()
 	{
@@ -14,10 +14,13 @@ class Detail_bahan_keluar_model extends CI_Model {
 		$this->load->database();
 	}
 
-	private function _get_datatables_query()
+	private function _get_datatables_query($id_keluar)
 	{
 		
-		$this->db->from($this->table);
+        $this->db->select('keluar_detail.*, menu.*');
+		$this->db->from('keluar_detail');
+		$this->db->join('menu', 'keluar_detail.id_menu = menu.id_menu', 'left');
+		$this->db->where('keluar_detail.id_keluar', $id_keluar);
 
 		$i = 0;
 	
@@ -53,38 +56,39 @@ class Detail_bahan_keluar_model extends CI_Model {
 		}
 	}
 
-	function get_datatables()
+	function get_datatables($id_keluar)
 	{
-		$this->_get_datatables_query();
+		$this->_get_datatables_query($id_keluar);
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function count_filtered()
+	function count_filtered($id_keluar)
 	{
-		$this->_get_datatables_query();
+		$this->_get_datatables_query($id_keluar);
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function count_all()
+	public function count_all($id_keluar)
 	{
-		$this->db->from($this->table);
+        $this->db->from($this->table);
+        $this->db->where('id_keluar',$id_keluar);
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($id_bahan)
+	public function get_by_id($id)
 	{
 		$this->db->from($this->table);
-		$this->db->where('id_detail_keluar',$id_detail_keluar);
+		$this->db->where('id',$id);
 		$query = $this->db->get();
 
 		return $query->row();
 	}
 
-	public function save($data)
+	public function save_dtl($data)
 	{
 		$this->db->insert($this->table, $data);
 		return $this->db->insert_id();
@@ -96,9 +100,9 @@ class Detail_bahan_keluar_model extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
-	public function delete_by_id($id_detail_keluar)
+	public function delete_by_id($id)
 	{
-		$this->db->where('id_detail_keluar', $id_detail_keluar);
+		$this->db->where('id', $id);
 		$this->db->delete($this->table);
 	}
 

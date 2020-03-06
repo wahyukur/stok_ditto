@@ -1,36 +1,68 @@
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800"><?php echo $page; ?></h1>
-    <div class="col-m-2">
-        <button class="btn btn-danger" onclick="bulk_delete()"><i class="glyphicon glyphicon-trash"></i> Bulk Delete</button>
-        <button class="btn btn-success" onclick="add_bahan()"><i class="glyphicon glyphicon-plus"></i> Add bahan</button>
-    </div>
-    
-</div>
+<style>
+    .tulisan_apik{
+        text-align: center;
+        font-family:Impact;
+        font-size:150%;
+    }
 
-<div class="card shadow mb-4">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-striped" id="table" width="100%" cellspacing="0" >
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" id="check-all"></th>
-                        <th>ID laporan keluar</th>
-                        <th>ID Menu</th>
-                         <th>ID Periode</th>
-                         <th>ID Bahan</th>
-                         <th>Jumlah bahan keluar</th>
-                         <th>unit ID</th>
-                         <th>Tanggal Keluar</th>
-                        <th style="width:150px;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    .tulisan_tanggal{
+        text-align: center;
+        font-family:courier;
+        font-size:150%;
+    }
+</style>
+
+<div class="row">
+    <div class="col-3">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Header</h6>
+            </div>
+            <div class="card-body">
+                <div class = "row">
+                    <div class="col-12">
+                        <p class="tulisan_apik"> <?php echo $id_keluar; ?></p>
+                        <p class="tulisan_tanggal"> <?php echo date('d F Y', strtotime($tgl_keluar)); ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
+    <div class="col-9">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Detail</h6>
+            </div>
+
+            <button onclick="bulk_delete()" class="btn btn-danger btn-icon-split"><span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+                <span class="text">HAPUS PILIHAN</span>
+            </button>
+
+            <button onclick="add_detail()" class="btn btn-success btn-icon-split"><span class="icon text-white-50"><i class="glyphicon glyphicon-plus"></i></span>
+                <span class="text">TAMBAH</span>
+            </button>
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="table" width="100%" cellspacing="0" >
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nama Menu</th>
+                                <th>Qty</th>
+                                <th style="width:150px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <script src="<?php echo base_url('assets/asetku/jquery/jquery-2.1.4.min.js')?>"></script>
 <script src="<?php echo base_url('assets/asetku/bootstrap/js/bootstrap.min.js')?>"></script>
@@ -44,6 +76,7 @@
 var save_method; 
 var table;
 var base_url = '<?php echo base_url();?>';
+var id_keluar = '<?php echo $id_keluar; ?>';
 
 $(document).ready(function() {
 
@@ -56,7 +89,7 @@ $(document).ready(function() {
 
         // Load data for the table's content from an Ajax source
         "ajax": {
-            "url": "<?php echo site_url('detail_bahan_keluar/ajax_list')?>",
+            "url": "<?php echo site_url('laporan_keluar/ajax_list_detail/')?>"+id_keluar,
             "type": "POST"
         },
 
@@ -109,18 +142,18 @@ $(document).ready(function() {
 
 
 
-function add_bahan()
+function add_detail()
 {
     save_method = 'add';
     $('#form')[0].reset(); // reset form on modals
     $('.form-group').removeClass('has-error'); // clear error class
     $('.help-block').empty(); // clear error string
     $('#modal_form').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add bahan'); // Set Title to Bootstrap modal title
+    $('.modal-title').text('Add Detail'); // Set Title to Bootstrap modal title
 
 }
 
-function edit_bahan(id_bahan_keluar)
+function edit_detail(id)
 {
     save_method = 'update';
     $('#form_edit')[0].reset(); // reset form on modals
@@ -130,21 +163,20 @@ function edit_bahan(id_bahan_keluar)
 
     //Ajax Load data from ajax
     $.ajax({
-        url : "<?php echo site_url('detail_bahan_keluar/ajax_edit')?>/" + id_bahan,
+        url : "<?php echo site_url('laporan_keluar/ajax_edit')?>/" + id,
         type: "GET",
         dataType: "JSON",
         success: function(data)
         {
+            
+            console.log(data);
 
-            $('[name="id_laporan_keluar"]').val(data.id_laporan_keluar);
+            $('[name="id"]').val(data.id);
+            $('[name="id_keluar"]').val(data.id_keluar);
             $('[name="id_menu"]').val(data.id_menu);
-            $('[name="id_periode"]').val(data.id_periode);
-            $('[name="id_bahan"]').val(data.id_bahan);
-            $('[name="id_bahan"]').val(data.id_bahan);
-            $('[name="id_bahan"]').val(data.id_bahan);
-            $('[name="id_bahan"]').val(data.id_bahan);
+            $('[name="jumlah_menu"]').val(data.qty);
             $('#modal_edit').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('Edit bahan'); // Set title to Bootstrap modal title
+            $('.modal-title').text('Edit Detail'); // Set title to Bootstrap modal title
 
 
         },
@@ -165,7 +197,7 @@ function save()
     $('#btnSave').text('saving...'); 
     $('#btnSave').attr('disabled',true);  
     var url;
-    url = "<?php echo site_url('bahan/ajax_add')?>";
+    url = "<?php echo site_url('laporan_keluar/ajax_add_detail')?>";
     
     var formData = new FormData($('#form')[0]);
     $.ajax({
@@ -211,7 +243,7 @@ function update_()
     $('#btnUpdate').text('updating...'); 
     $('#btnUpdate').attr('disabled',true);  
     var url;
-    url = "<?php echo site_url('bahan/ajax_update')?>";
+    url = "<?php echo site_url('laporan_keluar/ajax_update')?>";
     
     // ajax adding data to database
     var formData = new FormData($('#form_edit')[0]);
@@ -245,7 +277,7 @@ function update_()
         },
         error: function (jqXHR, textStatus, errorThrown)
         {
-            alert('Error adding / update data');
+            alert('Error update data');
             $('#btnUpdate').text('save'); 
             $('#btnUpdate').attr('disabled',false); 
 
@@ -253,13 +285,13 @@ function update_()
     });
 }
 
-function delete_bahan(id_bahan)
+function delete_detail(id)
 {
     if(confirm('Are you sure delete this data?'))
     {
         // ajax delete data to database
         $.ajax({
-            url : "<?php echo site_url('bahan/ajax_delete')?>/"+id_bahan,
+            url : "<?php echo site_url('laporan_keluar/ajax_delete')?>/"+id,
             type: "POST",
             dataType: "JSON",
             success: function(data)
@@ -291,8 +323,8 @@ function bulk_delete()
         {
             $.ajax({
                 type: "POST",
-                data: {id_bahan:list_id},
-                url: "<?php echo site_url('bahan/ajax_bulk_delete')?>",
+                data: {id_keluar:list_id},
+                url: "<?php echo site_url('laporan_keluar/ajax_bulk_delete')?>",
                 dataType: "JSON",
                 success: function(data)
                 {
@@ -331,28 +363,25 @@ function bulk_delete()
             </div>
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="id_bahan"/> 
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label class="control-label col-md-3">nama_bahan</label>
-                            <div class="col-md-9">
-                                <input name="nama_bahan" placeholder="nama_bahan" class="form-control" type="text">
-                                <span class="help-block"></span>
-                            </div>
+                    <input type="hidden" value="<?php echo $id_keluar; ?>" name="id_keluar"/> 
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Bahan</label>
+                        <div class="col-md-9">
+                            <!-- <input name="id_bahan" placeholder="ID bahan" class="form-control " type="text">
+                            <span class="help-block"></span> -->
+                            <select  name="id_menu" class="form-control">
+                                <option value="" selected="selected">Pilih Menu</option>
+                                <?php foreach($menu as $row){?>
+                                    <option value="<?php echo $row->id_menu;?>"><?php echo $row->nama_menu;?></option>
+                                <?php } ?>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">unit_groupid</label>
-                            <div class="col-md-9">
-                                <input name="unit_groupid" placeholder="unit_groupid" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">created_at</label>
-                            <div class="col-md-9">
-                                <input name="created_at" placeholder="created_at" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Qty</label>
+                        <div class="col-md-9">
+                            <input name="jumlah_menu" class="form-control " type="number">
+                            <span class="help-block"></span>
                         </div>
                     </div>
                 </form>
@@ -376,33 +405,24 @@ function bulk_delete()
             </div>
             <div class="modal-body form">
                 <form action="#" id="form_edit" class="form-horizontal">
-                    <!-- <input type="hidden" value="" name="id_bahan"/>  -->
+                    <input type="hidden" name="id"/>
+                    <input type="hidden" name="id_keluar"/>
                     <div class="form-body">
-                        <div class="form-group">
-                            <label class="control-label col-md-3">ID bahan</label>
-                            <div class="col-md-9">
-                                <input name="id_bahan" placeholder="ID bahan" class="form-control" type="text" readonly>
-                                <span class="help-block"></span>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Menu</label>
+                        <div class="col-md-9">
+                                <select  name="id_menu" class="form-control">
+                                    <option value="" selected="selected">Pilih Keluar</option>
+                                    <?php foreach($menu as $row){?>
+                                        <option value="<?php echo $row->id_menu;?>"><?php echo $row->nama_menu;?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="control-label col-md-3">nama_bahan</label>
+                            <label class="control-label col-md-3">Qty</label>
                             <div class="col-md-9">
-                                <input name="nama_bahan" placeholder="nama_bahan" class="form-control" type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">unit_groupid</label>
-                            <div class="col-md-9">
-                                <input name="unit_groupid" placeholder="unit_groupid" class="form-control " type="text">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3">end_date</label>
-                            <div class="col-md-9">
-                                <input name="created_at" placeholder="created_at" class="form-control " type="text">
+                                <input name="jumlah_menu" class="form-control " type="number">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -417,22 +437,3 @@ function bulk_delete()
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- End Bootstrap modal -->
-
- <!--MODAL DELETE-->
-<!--  <form>
-    <div class="modal fade" id="Modal_Delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-               <strong>Are you sure to delete this record?</strong>
-          </div>
-          <div class="modal-footer">
-            <input type="hidden" name="id_bahan" class="form-control">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-            <button type="button" onclick="delete_btn()" class="btn btn-primary">Yes</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    </form> -->
-<!--END MODAL DELETE-->
