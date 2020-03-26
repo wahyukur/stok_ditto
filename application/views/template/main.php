@@ -85,28 +85,25 @@
                 <span>Master Menu</span>
             </a>
         </li>
-        <!-- <li class="nav-item">
-            <a class="nav-link" href="<!?php echo base_url('index.php/Periode') ?>">
-                <i class="fas fa-fw fa-box-open"></i>
-                <span>Daftar Periode</span>
-            </a>
-        </li> -->
+        
         <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url('index.php/bahan') ?>">
                 <i class="fas fa-fw fa-box-open"></i>
                 <span>Master Bahan</span>
             </a>
         </li>
-        <!-- <li class="nav-item">
-            <a class="nav-link" href="<?php echo base_url('index.php/stok_bahan') ?>">
-                <i class="fas fa-fw fa-box-open"></i>
-                <span>Stok Bahan</span>
-            </a>
-        </li> -->
+        
         <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url('index.php/unit_group') ?>">
                 <i class="fas fa-fw fa-box-open"></i>
                 <span>Master Unit</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="<!?php echo base_url('index.php/Periode') ?>">
+                <i class="fas fa-fw fa-box-open"></i>
+                <span>Stock</span>
             </a>
         </li>
 

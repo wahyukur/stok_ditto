@@ -151,6 +151,16 @@ class Laporan_keluar extends CI_Controller {
 
 		$insert = $this->detail_keluar->save_dtl($data);
 
+		$id_keluar = $this->input->post('id_keluar');
+		$id_menu = $this->input->post('id_menu');
+		$qty = $this->input->post('qty');
+
+		$get_data_komposisi = $this->detail_keluar->get_bahan($id_keluar, $id_menu, $qty);
+
+
+
+		$insert_komposisi = $this->detail_keluar->save_dtl_komposisi($data);
+
 		echo json_encode(array("status" => TRUE));
 		
 	}
