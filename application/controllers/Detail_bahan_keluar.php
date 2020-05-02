@@ -68,16 +68,20 @@ class Detail_bahan_keluar extends CI_Controller {
 		$this->_validate();
 		
 		$data = array(
-				'id_laporan_keluar' => $this->input->post('id_laporan_keluar'),
-				'id_menu' => $this->input->post('id_menu'),
-				'id_periode' => $this->input->post('id_periode'),
-				'id_periode' => $this->input->post('id_bahan'),
-				'jumlah_bahan_keluar' => $this->input->post('jumlah_bahan_keluar'),
-				'unitid' => $this->input->post('unitid'),
-				'tanggal_keluar' => $this->input->post('tanggal_keluar')
-			);
+			'id_laporan_keluar' => $this->input->post('id_laporan_keluar'),
+			'id_menu' => $this->input->post('id_menu'),
+			'id_periode' => $this->input->post('id_periode'),
+			'id_periode' => $this->input->post('id_bahan'),
+			'jumlah_bahan_keluar' => $this->input->post('jumlah_bahan_keluar'),
+			'unitid' => $this->input->post('unitid'),
+			'tanggal_keluar' => $this->input->post('tanggal_keluar')
+		);
 
 		$insert = $this->detail_bahan_keluar->save($data);
+
+		
+		$id_menu = $this->input->post('id_menu');
+		
 
 		echo json_encode(array("status" => TRUE));
 	}

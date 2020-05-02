@@ -140,4 +140,15 @@ class Komposisi_menu_model extends CI_Model {
 
 		return $query->result();
 	}
+
+	public function get_menuid()
+	{
+		$this->db->select('id_menu');
+		$this->db->from('menu');
+		$this->db->order_by('id_menu', 'desc');
+		$this->db->limit('1');
+
+		$query = $this->db->get();
+		return $query->row()->id_menu;
+	}
 }

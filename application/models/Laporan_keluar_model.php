@@ -4,9 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Laporan_keluar_model extends CI_Model {
 
 	var $table = 'laporan_keluar';
-	var $column_order = array(null,'id_periode','id_menu','jumlah_menu','tanggal_keluar','approved_',null); //set column field database for datatable orderable
-	var $column_search = array('id_periode','id_menu','jumlah_menu','tanggal_keluar','approved_'); //set column field database for datatable searchable just nama_laporan_keluar , category , address are searchable
-	var $order = array('id_laporan_keluar' => 'desc'); // default order 
+	var $column_order = array(null,'id_keluar','tanggal_keluar',null); //set column field database for datatable orderable
+	var $column_search = array('id_keluar','tanggal_keluar'); //set column field database for datatable searchable just nama_laporan_keluar , category , address are searchable
+	var $order = array('id_keluar' => 'desc'); // default order 
 
 	public function __construct()
 	{
@@ -75,10 +75,11 @@ class Laporan_keluar_model extends CI_Model {
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($id_laporan_keluar)
+	public function get_by_id($id_keluar)
 	{
+		$this->db->select('tanggal_keluar');
 		$this->db->from($this->table);
-		$this->db->where('id_laporan_keluar',$id_laporan_keluar);
+		$this->db->where('id_keluar',$id_keluar);
 		$query = $this->db->get();
 
 		return $query->row();
@@ -90,17 +91,21 @@ class Laporan_keluar_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 
-	public function update($where, $data)
-	{
-		$this->db->update($this->table, $data, $where);
-		return $this->db->affected_rows();
+	public function get_for_check($bulan, $tahun)
+	{	
+		$query = $this->db->query("
+			SELECT id_keluar   
+			FROM laporan_keluar 
+			WHERE YEAR(tanggal_keluar) = '$tahun' and MONTH(tanggal_keluar) = '$bulan' 
+		");
+
+		return $query->num_rows();
 	}
 
-	public function delete_by_id($id_laporan_keluar)
+	public function get_menu()
 	{
-		$this->db->where('id_laporan_keluar', $id_laporan_keluar);
-		$this->db->delete($this->table);
+		$this->db->from('menu');
+
+		return $this->db->get()->result();
 	}
-
-
 }

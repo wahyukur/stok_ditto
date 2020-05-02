@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class laporan_masuk_model extends CI_Model {
+class Detail_masuk_model extends CI_Model {
 
-	var $table = 'laporan_masuk';
-	var $column_order = array(null,'id_masuk','tanggal_masuk',null); //set column field database for datatable orderable
-	var $column_search = array('id_masuk','tanggal_masuk'); //set column field database for datatable searchable just nama_laporan_masuk , category , address are searchable
-	var $order = array('id_masuk' => 'desc'); // default order 
+	var $table = 'masuk_detail';
+	var $column_order = array(null,'id_masuk','id_bahan','qty','id_unit',null); //set column field database for datatable orderable
+	var $column_search = array('id_masuk','id_bahan','qty','id_unit'); //set column field database for datatable searchable just nama_masuk_detail , category , address are searchable
+	var $order = array('id' => 'asc'); // default order 
 
 	public function __construct()
 	{
@@ -14,11 +14,14 @@ class laporan_masuk_model extends CI_Model {
 		$this->load->database();
 	}
 
-	private function _get_datatables_query()
+	private function _get_datatables_query($id_masuk)
 	{
 		
-		$this->db->from($this->table);
-		
+        $this->db->select('masuk_detail.*, bahan.*, unit.unitid');
+		$this->db->from('masuk_detail');
+		$this->db->join('bahan', 'masuk_detail.id_bahan = bahan.id_bahan', 'left');
+		$this->db->join('unit', 'masuk_detail.id_unit = unit.id_unit', 'left');
+		$this->db->where('masuk_detail.id_masuk', $id_masuk);
 
 		$i = 0;
 	
@@ -54,57 +57,41 @@ class laporan_masuk_model extends CI_Model {
 		}
 	}
 
-	function get_datatables()
+	function get_datatables($id_masuk)
 	{
-		$this->_get_datatables_query();
+		$this->_get_datatables_query($id_masuk);
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-	function count_filtered()
+	function count_filtered($id_masuk)
 	{
-		$this->_get_datatables_query();
+		$this->_get_datatables_query($id_masuk);
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function count_all()
+	public function count_all($id_masuk)
 	{
-		$this->db->from($this->table);
+        $this->db->from($this->table);
+        $this->db->where('id_masuk',$id_masuk);
 		return $this->db->count_all_results();
 	}
 
-	public function get_by_id($id_masuk)
+	public function get_by_id($id)
 	{
 		$this->db->from($this->table);
-		$this->db->where('id_masuk',$id_masuk);
+		$this->db->where('id',$id);
 		$query = $this->db->get();
 
 		return $query->row();
 	}
 
-	public function get_for_check($bulan, $tahun)
-	{	
-		$query = $this->db->query("
-			SELECT id_masuk   
-			FROM laporan_masuk 
-			WHERE YEAR(tanggal_masuk) = '$tahun' and MONTH(tanggal_masuk) = '$bulan' 
-		");
-
-		return $query->num_rows();
-	}
-
 	public function save($data)
 	{
 		$this->db->insert($this->table, $data);
-		return $this->db->insert_id();
-	}
-
-	public function save_dtl($data)
-	{
-		$this->db->insert('masuk_detail', $data);
 		return $this->db->insert_id();
 	}
 
@@ -114,17 +101,11 @@ class laporan_masuk_model extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
-	public function delete_by_id($id_laporan_masuk)
+	public function delete_by_id($id)
 	{
-		$this->db->where('id_laporan_masuk', $id_laporan_masuk);
+		$this->db->where('id', $id);
 		$this->db->delete($this->table);
 	}
 
-	public function get_bahan()
-	{
-		$this->db->from('bahan');
-
-		return $this->db->get()->result();
-	}
 
 }

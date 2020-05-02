@@ -122,4 +122,15 @@ class Unit_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+
+	public function get_unitid()
+	{
+		$this->db->select('unit_groupid');
+		$this->db->from('unit_group');
+		$this->db->order_by('unit_groupid', 'desc');
+		$this->db->limit('1');
+
+		$query = $this->db->get();
+		return $query->row()->unit_groupid;
+	}
 }
