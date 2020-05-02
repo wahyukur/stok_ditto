@@ -149,12 +149,17 @@ class Laporan_keluar extends CI_Controller {
 			'qty' => $this->input->post('jumlah_menu')
 		);
 
-		$id_insert = $this->detail_keluar->save_dtl($data);
+		$insert = $this->detail_keluar->save_dtl($data);
 
-		$get_komposisi = $this->detail_keluar->get_bahan($id_insert);
-		foreach ($get_komposisi as $k) {
-			$this->detail_keluar->save_dtl_komposisi($k);
-		}
+		$id_keluar = $this->input->post('id_keluar');
+		$id_menu = $this->input->post('id_menu');
+		$qty = $this->input->post('qty');
+
+		$get_data_komposisi = $this->detail_keluar->get_bahan($id_keluar, $id_menu, $qty);
+
+
+
+		$insert_komposisi = $this->detail_keluar->save_dtl_komposisi($data);
 
 		echo json_encode(array("status" => TRUE));
 		
@@ -211,40 +216,10 @@ class Laporan_keluar extends CI_Controller {
 
 		if($this->input->post('jumlah_menu') == '')
 		{
-			$data['inputerror'][] = 'jumlah_menu';
+			$data['inputerror'][] = 'jumlah_bahan';
 			$data['error_string'][] = 'Masukkan Jumlah Menu';
 			$data['status'] = FALSE;
 		}
-
-		if (!empty($this->input->post('jumlah_menu')) && !empty($this->input->post('id_menu'))) {
-			$get_qty = $this->detail_keluar->get_qty($this->input->post('jumlah_menu'), $this->input->post('id_menu'));
-			$cek_stok = true;
-			$bahan = [];
-
-			foreach ($get_qty as $c) {
-				$get_stok = $this->detail_keluar->get_stok($c->id_bahan, $c->id_unit);
-				if ($get_stok == NULL ) {
-					$cek_stok = false;
-				} else {
-					$jumlah_stok = $this->detail_keluar->get_jumlah($c->id_bahan, $c->id_unit);
-					if ($c->qtySum > $jumlah_stok) {
-						$cek_stok = false;
-					}
-				}
-			}
-			
-			// echo '<pre>';
-			// var_dump($bahan);
-			// die();
-
-			if(!$cek_stok)
-			{
-				$data['inputerror'][] = 'jumlah_menu';
-				$data['error_string'][] = 'Jumlah stok bahan kurang / kosong';
-				$data['status'] = FALSE;
-			}
-		}
-		
 
 		if($data['status'] === FALSE)
 		{

@@ -106,51 +106,5 @@ class Detail_keluar_model extends CI_Model {
 		$this->db->delete($this->table);
 	}
 
-	public function get_bahan($id)
-	{
-		$query = $this->db->query("
-			select b.id, b.id_keluar, b.id_menu, a.id_bahan, (a.jumlah * b.qty) as qty_total, a.unitid as id_unit 
-			from komposisi_menu a 
-			left join keluar_detail b on a.id_menu = b.id_menu 
-			where b.id = $id 
-		");
-
-        return $query->result();
-	}
-
-	public function get_stok($id_bahan, $id_unit)
-	{
-		$query = $this->db->query("
-			SELECT * from stok_bahan where id_bahan = $id_bahan and id_unit = $id_unit
-		");
-
-        return $query->result();
-	}
-
-	public function get_jumlah($id_bahan, $id_unit)
-	{
-		$query = $this->db->query("
-			SELECT * from stok_bahan where id_bahan = $id_bahan and id_unit = $id_unit
-		");
-
-        return $query->row()->jumlah_bahan;
-	}
-
-	public function get_qty($qty, $id)
-	{
-		$query = $this->db->query("
-			SELECT id_menu, id_bahan, unitid as id_unit, ($qty * jumlah) as qtySum 
-			FROM komposisi_menu 
-			WHERE id_menu = $id 
-		");
-
-        return $query->result();
-	}
-
-	public function save_dtl_komposisi($data)
-	{
-		$this->db->insert('keluar_bahan_detail', $data);
-		return $this->db->insert_id();
-	}
 
 }

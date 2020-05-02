@@ -24,6 +24,8 @@
 
 </head>
 
+</head>
+
 <body id="page-top">
 
   <!-- Page Wrapper -->
@@ -102,23 +104,9 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="<?php echo base_url('index.php/Stok') ?>">
+            <a class="nav-link" href="<!?php echo base_url('index.php/Periode') ?>">
                 <i class="fas fa-fw fa-box-open"></i>
                 <span>Stock</span>
-            </a>
-        </li>
-
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Process
-      </div>
-
-        <li class="nav-item">
-            <a class="nav-link" href="<?php echo base_url('index.php/Triple_exp_smoothing') ?>">
-                <i class="fas fa-fw fa-box-open"></i>
-                <span>Peramalan Stok</span>
             </a>
         </li>
 
